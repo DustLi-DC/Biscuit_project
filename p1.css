@@ -267,6 +267,36 @@ nav a:hover, nav a.active {
     border-radius: 3px;
 }
 
+/*时间轴图片悬浮-by牢詹*/
+.timeline-item-horizontal {
+    position: relative;
+    overflow: hidden;
+}
+
+.timeline-item-horizontal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10%;
+    background-size: cover;        /* 充满但保持比例 */
+    background-position: center;   /* 居中 */
+    opacity: 0;                    /* 默认隐藏 */
+    transition: opacity .6s ease;  /* 淡入动画 */
+    z-index: 0;                   /* 放到文字后面 */
+}
+
+/* 鼠标悬停时显示 */
+.timeline-item-horizontal:hover::before {
+    opacity: 0.2;   /* 半透明阴影，可自行调整 0.1～0.3 */
+}
+
+.timeline-item-horizontal.has-bg-img::before {
+    background-image: var(--bg-img);
+}
+
 .timeline-container {
     display: flex;
     min-width: 1400px; /* 增加最小宽度 */
