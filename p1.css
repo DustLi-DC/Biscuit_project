@@ -27,7 +27,7 @@ body {
     /* 改进的背景设置 */
     background-image:
         /* 半透明白色叠加层 */
-            linear-gradient(rgba(255, 255, 240, 0.68), rgba(255, 255, 240, 0.68)),
+            linear-gradient(rgba(255, 255, 240, 0.78), rgba(255, 255, 240, 0.78)),
                 /* 背景图片 */
             url('images/background.jpg');
     background-size: cover;
