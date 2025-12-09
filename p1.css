@@ -1,7 +1,11 @@
+/*
+ * 全局样式和变量
+ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* 确保使用中文字体 */
     font-family: 'SimSun', 'STSong', 'Microsoft YaHei', serif;
 }
 
@@ -21,16 +25,15 @@ body {
     color: var(--dark-gray);
     line-height: 1.6;
     /* 改进的背景设置 */
-    background-image: 
-        /* 半透明白色叠加层，透明度调整为0.85-0.9 */
-        linear-gradient(rgba(255, 255, 240, 0.68), rgba(255, 255, 240, 0.68)),
-        /* 背景图片 */
-        url('images/background.jpg');
+    background-image:
+        /* 半透明白色叠加层 */
+            linear-gradient(rgba(255, 255, 240, 0.68), rgba(255, 255, 240, 0.68)),
+                /* 背景图片 */
+            url('images/background.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    /* 确保背景图片清晰 */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
@@ -258,35 +261,161 @@ nav a:hover, nav a.active {
     font-size: 1.1rem;
 }
 
-/* 水平时间轴样式 */
-/* 水平时间轴样式 - 增大盒子尺寸 */
+/* ------------------------------------------------------------------- */
+/* 垂直时间轴样式 (Vertical Timeline) */
+/* ------------------------------------------------------------------- */
 .timeline-horizontal {
     position: relative;
-    overflow-x: auto;
-    padding: 60px 0 120px; /* 增加上下内边距 */
-    margin: 0 -20px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-red) var(--light-gray);
+    padding: 40px 0;
+    overflow-x: hidden;
 }
 
+/* 垂直时间线 */
 .timeline-horizontal:before {
     content: '';
     position: absolute;
-    left: 50px;
-    top: 60px; /* 调整时间线位置 */
-    width: calc(100% - 100px);
-    height: 5px; /* 加粗时间线 */
-    background: linear-gradient(90deg, var(--primary-red), var(--gold));
+    left: 50%; /* 时间线居中 */
+    top: 0;
+    width: 5px; /* 时间线宽度 */
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-red), var(--gold));
     z-index: 1;
     border-radius: 3px;
+    transform: translateX(-50%);
 }
 
-/*时间轴图片悬浮-by牢詹*/
+.timeline-container {
+    display: block; /* 垂直堆叠，不再使用 Flexbox */
+    min-width: unset;
+    padding: 0;
+    position: relative;
+}
+
 .timeline-item-horizontal {
     position: relative;
-    overflow: hidden;
+    width: 50%; /* 占据容器一半宽度 */
+    margin-bottom: 60px; /* 垂直间距 */
+    padding: 0 30px;
 }
 
+/* 偶数项移到右侧 */
+.timeline-item-horizontal:nth-child(even) {
+    margin-left: 50%;
+}
+
+/* 奇数项内容位于右侧 */
+.timeline-item-horizontal:nth-child(odd) .timeline-content-horizontal {
+    padding-left: 0;
+    padding-right: 30px;
+    border-right: 6px solid var(--primary-red);
+    border-top: none;
+    text-align: right;
+}
+
+/* 偶数项内容位于左侧 */
+.timeline-item-horizontal:nth-child(even) .timeline-content-horizontal {
+    padding-right: 0;
+    padding-left: 30px;
+    border-left: 6px solid var(--primary-red);
+    border-top: none;
+    text-align: left;
+}
+
+/* 时间点定位 (居中垂直线) */
+.timeline-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--primary-red), var(--light-red));
+    border: 5px solid white;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 4px 15px rgba(139, 26, 26, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* 奇数项的点在右侧 */
+.timeline-item-horizontal:nth-child(odd) .timeline-dot {
+    right: -14px; /* 位于垂直线左侧 */
+    left: auto;
+}
+
+/* 偶数项的点在左侧 */
+.timeline-item-horizontal:nth-child(even) .timeline-dot {
+    left: -14px; /* 位于垂直线右侧 */
+    right: auto;
+}
+
+/* 统一内容卡片的样式 */
+.timeline-content-horizontal {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    margin-top: 0; /* 移除交错边距 */
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.timeline-content-horizontal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(139, 26, 26, 0.2);
+}
+
+.timeline-content-horizontal h3 {
+    color: var(--primary-red);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* 年份标签定位 (紧靠卡片，位于线条附近) */
+.timeline-year-horizontal {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    z-index: 3;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 奇数项年份在左侧 */
+.timeline-item-horizontal:nth-child(odd) .timeline-year-horizontal {
+    right: 100%;
+    margin-right: 35px; /* 调整与卡片的距离 */
+    left: auto;
+}
+
+/* 偶数项年份在右侧 */
+.timeline-item-horizontal:nth-child(even) .timeline-year-horizontal {
+    left: 100%;
+    margin-left: 35px; /* 调整与卡片的距离 */
+    right: auto;
+}
+
+/* 清除旧的交错样式 */
+.timeline-item-horizontal:nth-child(odd) .timeline-content-horizontal,
+.timeline-item-horizontal:nth-child(even) .timeline-content-horizontal {
+    margin-top: 0;
+}
+.timeline-item-horizontal:nth-child(even) .timeline-year-horizontal {
+    top: 50%;
+}
+
+/* 悬浮图片 (保持不变，适应新结构) */
 .timeline-item-horizontal::before {
     content: "";
     position: absolute;
@@ -295,203 +424,78 @@ nav a:hover, nav a.active {
     width: 100%;
     height: 100%;
     border-radius: 10%;
-    background-size: cover;        /* 充满但保持比例 */
-    background-position: center;   /* 居中 */
-    opacity: 0;                    /* 默认隐藏 */
-    transition: opacity .6s ease;  /* 淡入动画 */
-    z-index: 0;                   /* 放到文字后面 */
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity .6s ease;
+    z-index: 0;
 }
-
-/* 鼠标悬停时显示 */
 .timeline-item-horizontal:hover::before {
-    opacity: 0.2;   /* 半透明阴影，可自行调整 0.1～0.3 */
+    opacity: 0.2;
 }
 
-.timeline-item-horizontal.has-bg-img::before {
-    background-image: var(--bg-img);
-}
-
-.timeline-container {
-    display: flex;
-    min-width: 1400px; /* 增加最小宽度 */
-    padding: 0 50px;
-    position: relative;
-    gap: 20px; /* 增加项目间距 */
-}
-
-.timeline-item-horizontal {
-    flex: 1;
-    position: relative;
-    padding: 0 15px;
-    min-width: 250px; /* 增加最小宽度 */
-}
-
-.timeline-dot {
-    position: absolute;
-    top: 60px; /* 调整点位置 */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 28px; /* 增大时间点 */
-    height: 28px;
-    background: linear-gradient(135deg, var(--primary-red), var(--light-red));
-    border: 5px solid white; /* 加粗边框 */
-    border-radius: 50%;
-    z-index: 2;
-    box-shadow: 0 4px 15px rgba(139, 26, 26, 0.4);
-    transition: all 0.3s ease;
-}
-
-.timeline-content-horizontal {
-    background-color: white;
-    padding: 30px; /* 增加内边距 */
-    border-radius: 12px; /* 增加圆角 */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    margin-top: 40px; /* 增加与时间点的距离 */
-    border-top: 6px solid var(--primary-red); /* 加粗顶部边框 */
-    position: relative;
-    transition: all 0.3s ease;
-    min-height: 280px; /* 增加最小高度 */
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 320px; /* 设置最大宽度 */
-}
-
-.timeline-content-horizontal:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(139, 26, 26, 0.2);
-}
-
-.timeline-content-horizontal h3 {
-    color: var(--primary-red);
-    margin-bottom: 20px; /* 增加标题下方间距 */
-    font-size: 1.4rem; /* 增大标题字体 */
-    font-weight: 700;
-    line-height: 1.3;
-    min-height: 40px; /* 确保标题有足够高度 */
-}
-
-.timeline-content-horizontal p {
-    color: var(--dark-gray);
-    line-height: 1.7; /* 增加行高 */
-    flex-grow: 1;
-    font-size: 1rem; /* 确保字体大小合适 */
-    margin-bottom: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 6; /* 限制显示行数 */
-    -webkit-box-orient: vertical;
-}
-
-.timeline-year-horizontal {
-    position: absolute;
-    top: -70px; /* 调整年份位置 */
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
-    color: white;
-    padding: 12px 20px; /* 增加内边距 */
-    border-radius: 6px; /* 增加圆角 */
-    font-weight: bold;
-    font-size: 1.3rem; /* 增大字体 */
-    white-space: nowrap;
-    z-index: 3;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-    min-width: 100px; /* 确保年份有足够宽度 */
-    text-align: center;
-}
-
-/* 为奇数项和偶数项设置不同的内容位置 */
-.timeline-item-horizontal:nth-child(odd) .timeline-content-horizontal {
-    margin-top: 40px;
-}
-
-.timeline-item-horizontal:nth-child(even) .timeline-content-horizontal {
-    margin-top: 100px; /* 增加偶数项的上边距 */
-}
-
-.timeline-item-horizontal:nth-child(even) .timeline-year-horizontal {
-    top: 20px; /* 调整偶数项年份位置 */
-}
-
-/* 添加阅读更多按钮样式 */
-.read-more {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--primary-red);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
-    padding-bottom: 2px;
-    align-self: flex-start;
-}
-
-.read-more:hover {
-    border-bottom-color: var(--primary-red);
-    color: var(--dark-red);
-}
-
-/* 响应式设计调整 */
+/* ------------------------------------------------------------------- */
+/* 垂直时间轴响应式：单列模式 (Mobile/Tablet) */
+/* ------------------------------------------------------------------- */
 @media (max-width: 768px) {
-    .timeline-horizontal {
-        padding: 40px 0 80px;
-    }
-
-    .timeline-container {
-        min-width: 1200px;
-        padding: 0 30px;
-        gap: 15px;
-    }
-
-    .timeline-content-horizontal {
-        padding: 25px;
-        min-height: 250px;
-        max-width: 280px;
-    }
-
-    .timeline-content-horizontal h3 {
-        font-size: 1.3rem;
-        min-height: 36px;
-    }
-
-    .timeline-content-horizontal p {
-        font-size: 0.95rem;
-        -webkit-line-clamp: 5;
-    }
-
-    .timeline-year-horizontal {
-        font-size: 1.2rem;
-        padding: 10px 18px;
-    }
-
-    .timeline-dot {
-        width: 24px;
-        height: 24px;
-        top: 50px;
-    }
-
+    /* 垂直线移到左侧 */
     .timeline-horizontal:before {
-        top: 50px;
+        left: 20px;
+        transform: none;
+    }
+
+    /* 所有项目独占一行 */
+    .timeline-item-horizontal {
+        width: 100%;
+        margin-left: 0;
+        padding: 0 0 0 50px; /* 左侧留出空间给垂直线 */
+    }
+
+    /* 所有点和年份都靠左 */
+    .timeline-dot {
+        left: 20px;
+        transform: translate(-50%, -50%);
+    }
+
+    /* 所有年份标签靠左侧 */
+    .timeline-year-horizontal {
+        position: static;
+        top: auto;
+        transform: none;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+    .timeline-item-horizontal:nth-child(odd) .timeline-year-horizontal,
+    .timeline-item-horizontal:nth-child(even) .timeline-year-horizontal {
+        /* 取消绝对定位，让年份自然流淌在卡片上方 */
+        position: relative;
+        left: auto;
+        right: auto;
+        margin: 0 0 10px 0;
+        padding: 6px 10px;
+        display: inline-block;
+
+    }
+
+    /* 统一内容卡片样式 */
+    .timeline-item-horizontal:nth-child(odd) .timeline-content-horizontal,
+    .timeline-item-horizontal:nth-child(even) .timeline-content-horizontal {
+        padding-right: 20px;
+        padding-left: 20px;
+        text-align: left;
+        border-left: 6px solid var(--primary-red);
+        border-right: none;
+    }
+
+    .timeline-item-horizontal:nth-child(odd) .timeline-dot,
+    .timeline-item-horizontal:nth-child(even) .timeline-dot {
+        left: 20px; /* 统一在左侧线上 */
+        right: auto;
     }
 }
 
-/* 为奇数项和偶数项设置不同的内容位置 */
-.timeline-item-horizontal:nth-child(odd) .timeline-content-horizontal {
-    margin-top: 30px;
-}
 
-.timeline-item-horizontal:nth-child(even) .timeline-content-horizontal {
-    margin-top: 80px;
-}
-
-.timeline-item-horizontal:nth-child(even) .timeline-year-horizontal {
-    top: 10px;
-}
-
-/* 馆藏展示 */
+/* 馆藏展示 (保持不变) */
 .exhibits {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -547,7 +551,7 @@ nav a:hover, nav a.active {
     margin-bottom: 15px;
 }
 
-/* 参观信息 */
+/* 参观信息 (保持不变) */
 .visit-info {
     background-color: var(--light-gray);
     border-radius: 10px;
@@ -586,7 +590,7 @@ nav a:hover, nav a.active {
     margin-bottom: 5px;
 }
 
-/* 页脚 */
+/* 页脚 (保持不变) */
 footer {
     background-color: var(--dark-red);
     color: white;
@@ -670,8 +674,11 @@ footer {
     transform: translateY(-3px);
 }
 
-/* 响应式设计 */
+/* ------------------------------------------------------------------- */
+/* 通用响应式调整 */
+/* ------------------------------------------------------------------- */
 @media (max-width: 768px) {
+    /* 顶部和导航栏调整 */
     .header-content {
         flex-direction: column;
         gap: 20px;
@@ -681,6 +688,11 @@ footer {
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
+    }
+
+    /* 英雄区调整 */
+    .hero {
+        padding: 70px 0;
     }
 
     .hero-content h2 {
@@ -700,36 +712,37 @@ footer {
         padding: 60px 0;
     }
 
-    .timeline-container {
-        min-width: 1000px;
-        padding: 0 20px;
-    }
-
-    .timeline-content-horizontal {
-        padding: 20px;
-        min-height: 200px;
-    }
-
-    .timeline-year-horizontal {
-        font-size: 1rem;
-        padding: 6px 12px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero {
-        padding: 70px 0;
-    }
-
-    .hero-content h2 {
-        font-size: 2rem;
-    }
-
     .section-title h2 {
         font-size: 2rem;
     }
 
+    /* 馆藏展示调整 */
+    .exhibits {
+        gap: 20px;
+    }
+
+    .exhibit-image {
+        height: 180px;
+    }
+
+    /* 参观信息调整 */
     .visit-info {
         padding: 25px;
+    }
+
+    .info-grid {
+        gap: 20px;
+    }
+
+    /* 页脚调整 */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-content h2 {
+        font-size: 2rem;
     }
 }
