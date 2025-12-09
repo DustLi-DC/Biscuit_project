@@ -232,13 +232,13 @@ nav a:hover, nav a.active {
 .section-title {
     text-align: center;
     margin-bottom: 50px;
-    position: relative;
 }
 
 .section-title h2 {
     font-size: 2.5rem;
     color: var(--primary-red);
     display: inline-block;
+    position: relative;
     padding-bottom: 15px;
     margin-bottom: 15px;
 }
@@ -246,7 +246,7 @@ nav a:hover, nav a.active {
 .section-title h2:after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
